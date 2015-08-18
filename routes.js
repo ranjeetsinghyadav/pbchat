@@ -134,6 +134,26 @@ module.exports = function(app,io){
 			socket.broadcast.to(socket.room).emit('receive', {msg: data.msg, user: data.user, img: data.img});
 		});
 	});
+	
+	app.get('/widget', function(req, res){
+		res.render('widget');
+	});
+	
+	var widget = io.on('connection', function (socket) {
+		socket.on('load', function(id){
+			console.log('WidgetId is: ' + id);
+		});
+		
+		/*socket.on('leave', function(id){
+			console.log('user '+ id +' disconnected');
+		});*/
+		
+		socket.on('sendMessage', function(msg){
+			 io.emit('sendMessage', msg);
+		});
+				
+	});
+
 };
 
 function findClientsSocket(io,roomId, namespace) {
